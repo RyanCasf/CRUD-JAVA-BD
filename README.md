@@ -1,7 +1,7 @@
 <h1>Interface - Java - Banco de Dados (MySql)</h1>
 <p>Contruction an project CRUD in Java with connection in MySql.</p>
 
-<hr><br>
+<hr>
 <h2>Why?</h2>
 <p>It was a file of school (end) and close for here with more details. <br>
 Using knows generals and complement things: <br>
@@ -12,7 +12,7 @@ By RYAN CASTRO FERREIRA,<br>
 <b style="color: blue;">LinkdIn </b>- https://www.linkedin.com/in/ryan-castro-ferreira/ <br>
 <b style="color: red;">Email </b>- ryancasf@gmail.com <br>
 
-<hr><br>
+<hr>
 <h2>Attention</h2>
 <p><h3>Help informations</h3> <br>
 localhost:3307 <br>
@@ -38,7 +38,7 @@ USE Empresa;
 SELECT * FROM Funcionarios;
 </pre>
 
-<hr><br>
+<hr>
 <h2>Built </h2>
 <p>.</p>
 <img src="img/Diagrama_Classe.PNG">
