@@ -48,4 +48,4 @@ SELECT * FROM Funcionarios;
 <img src="img/ScreenS-Func04.PNG">
 <img src="img/ScreenS-Func05.PNG">
 <img src="img/ScreenS-Func06.PNG">
-<video width="320" height="240" controls><source src="img/videoProjetoFinalJava.avi" type="video/avi"></video>
+<video width="320" height="240"><source src="img/videoProjetoFinalJava.avi" type="video/avi"></video>
