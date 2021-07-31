@@ -1,13 +1,15 @@
-<h1>Interface - Java - Banco de Dados (MySql)</h1>
-<p>Contruction an project CRUD in Java with connection in MySql.</p>
+<h1>CRUD - Java</h1>
+<p>Contruction an project CRUD in Java with connection in MySql. With interface, GUI, by JFrama.</p>
 
 <hr>
 <h2>Why?</h2>
-<p>It was a file of school (end) and close for here with more details. <br>
-Using knows generals and complement things: <br>
-ArrayList<String> Funcionarios = new ArrayList(); <br>
-POO somewhat Functional Struture Simple <br>
-Made in base Sql -follow- USB Serve (local)</p>
+<p>It was a file of school (end) and close for here with more details. Using knows generals and complement things: <br>
+<ul>
+	<li>ArrayList<String> Funcionarios = new ArrayList();</li><br>
+	<li>POO somewhat Functional Struture Simple</li><br>
+	<li>Made in base Sql -follow- USB Serve (local)</li></p>
+</ul>
+	
 By RYAN CASTRO FERREIRA,<br>
 <b style="color: blue;">LinkdIn </b>- https://www.linkedin.com/in/ryan-castro-ferreira/ <br>
 <b style="color: red;">Email </b>- ryancasf@gmail.com <br>
@@ -25,7 +27,8 @@ useTimezone=true&serverTimezone=UTC&useSSL=false"</p>
 <pre>
 CREATE DATABASE Empresa;
 
-create table Funcionarios (
+create table Funcionarios 
+(
 	id int auto_increment,
  	nome_funcionario varchar(64),
  	salario_funcionario float,
@@ -40,7 +43,7 @@ SELECT * FROM Funcionarios;
 
 <hr>
 <h2>Built </h2>
-<p>.</p>
+<p>Design (planner too).</p>
 <img src="img/Diagrama_Classe.PNG">
 <img src="img/ScreenS-Func01.PNG">
 <img src="img/ScreenS-Func02.PNG">
