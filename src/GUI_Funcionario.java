@@ -1,26 +1,34 @@
-import javax.swing.JOptionPane;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
-import javax.swing.*;
 
-public class GUI_Funcionario extends javax.swing.JFrame {
+import javax.swing.JOptionPane;
 
+public class GUI_Funcionario extends javax.swing.JFrame 
+{
     public GUI_Funcionario() {
         initComponents();
     }
 
-    private Connection con = null;
-    private Statement stmt = null;
+    private Connection con;
+    private Statement stmt;
     String sql;
 
     public void Conectar() {
-        String serverName = "localhost:3307/empresa?useTimezone=true&serverTimezone=UTC&useSSL=false", username = "root", password = "usbw", driverName = "com.mysql.jdbc.Driver";
-        String url = "jdbc:mysql://" + serverName;
+        final String serverName = "localhost:3307/empresa?useTimezone=true&serverTimezone=UTC&useSSL=false";
+        final String username = "root";
+        final String password = "usbw";
+        final String url = "jdbc:mysql://" + serverName;
+        
         try {
             con = DriverManager.getConnection(url, username, password);
             stmt = con.createStatement();
-            //System.out.println("BD conectado com sucesso!");
-        } catch (SQLException e) {
+        } 
+        catch (SQLException e) {
             JOptionPane.showMessageDialog(null, "Erro ao conectar o Banco de Dados: " + e.toString());
         }
     }
@@ -38,7 +46,7 @@ public class GUI_Funcionario extends javax.swing.JFrame {
             sql = "insert into Funcionarios (nome_funcionario,salario_funcionario,departamento_funcionario) values "
                     + "('" + nome + "'," + salario + ", '" + departamento + "')";
             stmt.executeUpdate(sql);
-            JOptionPane.showMessageDialog(null, "Funcionário cadastrado!");
+            JOptionPane.showMessageDialog(null, "FuncionÃ¡rio cadastrado!");
             this.jTextField1.setText(null);
             this.jTextField2.setText(null);
             this.jTextField3.setText(null);
@@ -63,7 +71,7 @@ public class GUI_Funcionario extends javax.swing.JFrame {
                 func.setNome(rs.getString("nome_funcionario"));
                 func.setSalario(Float.parseFloat(rs.getString("salario_funcionario")));
                 func.setDepartamento(rs.getString("departamento_funcionario"));
-                msg = "Nome: " + func.getNome() + " - Salário: R$" + func.getSalario() + " - Departamento: " + func.getDepartamento();
+                msg = "Nome: " + func.getNome() + " - SalÃ¡rio: R$" + func.getSalario() + " - Departamento: " + func.getDepartamento();
                 Funcionarios.add(msg);
             }
             for (int i = 0; i < Funcionarios.size(); i++) {
@@ -91,7 +99,7 @@ public class GUI_Funcionario extends javax.swing.JFrame {
                 nome = rs.getString("nome_funcionario");
                 departamento = rs.getString("departamento_funcionario");
                 salario = rs.getFloat("salario_funcionario");
-                JOptionPane.showMessageDialog(null, "Nome: " + nome + "\nSalário: R$" + salario + "\nDepartamento: " + departamento);
+                JOptionPane.showMessageDialog(null, "Nome: " + nome + "\nSalÃ¡rio: R$" + salario + "\nDepartamento: " + departamento);
                 try {
                     op = JOptionPane.showInputDialog("Deseja realmente excluir S/N: ");
                     if (op.equals("s") || (op.equals("S"))) {
@@ -104,7 +112,7 @@ public class GUI_Funcionario extends javax.swing.JFrame {
                         pstm.execute();
                         JOptionPane.showMessageDialog(null, "Registro Alterado...");
                     } else {
-                        JOptionPane.showMessageDialog(null, "Registro não alterado...");
+                        JOptionPane.showMessageDialog(null, "Registro nÃ£o alterado...");
                     }
                     this.jTextField1.setText(null);
                     this.jTextField2.setText(null);
@@ -115,7 +123,7 @@ public class GUI_Funcionario extends javax.swing.JFrame {
                 }
 
             } else {
-                JOptionPane.showMessageDialog(null, "Registro não encontrado...");
+                JOptionPane.showMessageDialog(null, "Registro nÃ£o encontrado...");
             }
         } catch (SQLException e) {
             System.out.println("Erro ao executar o comando SQL:" + e.toString());
@@ -139,7 +147,7 @@ public class GUI_Funcionario extends javax.swing.JFrame {
                 departamento = rs.getString("departamento_funcionario");
                 salario = rs.getFloat("salario_funcionario");
                 try {
-                    JOptionPane.showMessageDialog(null, "Nome: " + nome + "\nSalário: R$" + salario + "\nDepartamento: " + departamento);
+                    JOptionPane.showMessageDialog(null, "Nome: " + nome + "\nSalÃ¡rio: R$" + salario + "\nDepartamento: " + departamento);
                     op = JOptionPane.showInputDialog("Deseja realmente excluir S/N: ");
                     if (op.equals("s") || (op.equals("S"))) {
                         sql = "DELETE FROM Funcionarios WHERE id='" + cod + "'";
@@ -160,7 +168,7 @@ public class GUI_Funcionario extends javax.swing.JFrame {
                 }
 
             } else {
-                JOptionPane.showMessageDialog(null, "Registro não encontrado...");
+                JOptionPane.showMessageDialog(null, "Registro nÃ£o encontrado...");
             }
         } catch (SQLException e) {
             System.out.println("Erro ao executar o comando SQL:" + e.toString());
@@ -169,7 +177,8 @@ public class GUI_Funcionario extends javax.swing.JFrame {
 
     public void ConsultaDados() {
         ResultSet rs;
-        String nome, departamento;
+        String nome;
+        String departamento;
         float salario;
         int cod;
 
@@ -183,13 +192,13 @@ public class GUI_Funcionario extends javax.swing.JFrame {
                 nome = rs.getString("nome_funcionario");
                 departamento = rs.getString("departamento_funcionario");
                 salario = rs.getFloat("salario_funcionario");
-                JOptionPane.showMessageDialog(null, "Nome: " + nome + "\nSalário: R$" + salario + "\nDepartamento: " + departamento);
+                JOptionPane.showMessageDialog(null, "Nome: " + nome + "\nSalÃ¡rio: R$" + salario + "\nDepartamento: " + departamento);
                 this.jTextField1.setText(null);
                 this.jTextField2.setText(null);
                 this.jTextField3.setText(null);
                 this.jTextField4.setText(null);
             } else {
-                JOptionPane.showMessageDialog(null, "Registro não encontrado...");
+                JOptionPane.showMessageDialog(null, "Registro nÃ£o encontrado...");
             }
         } catch (SQLException e) {
             System.out.println("Erro ao executar o comando SQL:" + e.toString());
@@ -220,7 +229,7 @@ public class GUI_Funcionario extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jLabel1.setFont(new java.awt.Font("Tempus Sans ITC", 1, 24)); // NOI18N
-        jLabel1.setText("FUNCIONÁRIO");
+        jLabel1.setText("FUNCIONÃ�RIO");
 
         jLabel2.setText("Nome:");
 
@@ -230,7 +239,7 @@ public class GUI_Funcionario extends javax.swing.JFrame {
             }
         });
 
-        jLabel3.setText("salário:");
+        jLabel3.setText("salÃ¡rio:");
 
         jLabel4.setText("Departamento:");
 
@@ -282,7 +291,7 @@ public class GUI_Funcionario extends javax.swing.JFrame {
             }
         });
 
-        jLabel5.setText("Código (id):");
+        jLabel5.setText("CÃ³digo (id):");
 
         jTextField4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -447,23 +456,17 @@ public class GUI_Funcionario extends javax.swing.JFrame {
                     break;
                 }
             }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(GUI_Funcionario.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(GUI_Funcionario.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(GUI_Funcionario.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+        } catch (IllegalAccessException | InstantiationException | ClassNotFoundException | javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(GUI_Funcionario.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-        //</editor-fold>
+        
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new GUI_Funcionario().setVisible(true);
             }
         });
     }
-    // Variables declaration - do not modify//GEN-BEGIN:variables
+    
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
@@ -480,5 +483,4 @@ public class GUI_Funcionario extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField2;
     private javax.swing.JTextField jTextField3;
     private javax.swing.JTextField jTextField4;
-    // End of variables declaration//GEN-END:variables
 }

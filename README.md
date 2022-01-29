@@ -1,13 +1,12 @@
 <h1>CRUD - Java</h1>
 <p>Contruction an project CRUD in Java with connection in MySql. With interface, GUI, by JFrama.</p>
 
-<hr>
 <h2>Why?</h2>
-<p>It was a file of school (end) and close for here with more details. Using knows generals and complement things: <br>
+<p>It was a file of school (end) and close for here with more details. Using knows generals and complement things: </p>
 <ul>
-	<li>ArrayList<String> Funcionarios = new ArrayList();</li><br>
-	<li>POO somewhat Functional Struture Simple</li><br>
-	<li>Made in base Sql -follow- USB Serve (local)</li></p>
+	<li>ArrayList<String> Funcionarios = new ArrayList();</li>
+	<li>POO somewhat Functional Struture Simple;</li>
+	<li>Made in base Sql -follow- USB Serve (local).</li>
 </ul>
 	
 By RYAN CASTRO FERREIRA,<br>
@@ -35,10 +34,6 @@ create table Funcionarios
  	departamento_funcionario varchar(32),
  	primary key(id)
 );
-
-* seconds commands:
-USE Empresa;
-SELECT * FROM Funcionarios;
 </pre>
 
 <hr>
