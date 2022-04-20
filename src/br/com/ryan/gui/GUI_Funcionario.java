@@ -1,3 +1,5 @@
+package br.com.ryan.gui;
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -6,17 +8,19 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
-public class GUI_Funcionario extends javax.swing.JFrame 
-{
+import br.com.ryan.model.Funcionarios;
+
+public class GUI_Funcionario extends JFrame {
     public GUI_Funcionario() {
         initComponents();
     }
 
     private Connection con;
     private Statement stmt;
-    String sql;
+    private String sql;
 
     public void Conectar() {
         final String serverName = "localhost:3307/empresa?useTimezone=true&serverTimezone=UTC&useSSL=false";
@@ -27,39 +31,35 @@ public class GUI_Funcionario extends javax.swing.JFrame
         try {
             con = DriverManager.getConnection(url, username, password);
             stmt = con.createStatement();
-        } 
-        catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, "Erro ao conectar o Banco de Dados: " + e.toString());
+        }  catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Erro ao conectar o Banco de Dados: " + e.getMessage());
         }
     }
 
     public void setDados() {
         String nome;
         String departamento;
-        float salario;
+        BigDecimal salario;
 
         nome = this.jTextField1.getText();
-        salario = Float.parseFloat(this.jTextField2.getText());
+        salario = new BigDecimal(this.jTextField2.getText());
         departamento = this.jTextField3.getText();
 
         try {
             sql = "insert into Funcionarios (nome_funcionario,salario_funcionario,departamento_funcionario) values "
                     + "('" + nome + "'," + salario + ", '" + departamento + "')";
             stmt.executeUpdate(sql);
-            JOptionPane.showMessageDialog(null, "FuncionÃ¡rio cadastrado!");
-            this.jTextField1.setText(null);
-            this.jTextField2.setText(null);
-            this.jTextField3.setText(null);
-            this.jTextField4.setText(null);
+            
+            JOptionPane.showMessageDialog(null, "Funcionário cadastrado!");
+            limpar();
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, "Erro ao executar com o BD: " + e.toString());
+            JOptionPane.showMessageDialog(null, "Erro ao executar com o BD: " + e.getMessage());
         }
     }
 
     public void getDados() {
-        ArrayList<String> Funcionarios = new ArrayList();
+        ArrayList<String> funcionarios = new ArrayList<String>();
         ResultSet rs;
-        String msg;
 
         try {
             sql = "select * from Funcionarios";
@@ -69,24 +69,23 @@ public class GUI_Funcionario extends javax.swing.JFrame
                 Funcionarios func = new Funcionarios();
                 func.setId(rs.getInt("id"));
                 func.setNome(rs.getString("nome_funcionario"));
-                func.setSalario(Float.parseFloat(rs.getString("salario_funcionario")));
+                func.setSalario(new BigDecimal(rs.getString("salario_funcionario")));
                 func.setDepartamento(rs.getString("departamento_funcionario"));
-                msg = "Nome: " + func.getNome() + " - SalÃ¡rio: R$" + func.getSalario() + " - Departamento: " + func.getDepartamento();
-                Funcionarios.add(msg);
+                
+                funcionarios.add("Nome: " + func.getNome() + " - Saáario: R$" + func.getSalario() + " - Departamento: " + func.getDepartamento());
             }
-            for (int i = 0; i < Funcionarios.size(); i++) {
-                System.out.println(Funcionarios.get(i));
-            }
+            
+            funcionarios.forEach(System.out::println);
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, "Erro ao executar com o BD: " + e.toString());
+            JOptionPane.showMessageDialog(null, "Erro ao executar com o BD: " + e.getMessage());
         }
     }
 
     public void AlteraDados() {
         ResultSet rs;
         String nome, departamento, op;
-        float salario;
-        int cod;
+        BigDecimal salario;
+        long cod;
 
         cod = Integer.parseInt(this.jTextField4.getText());
 
@@ -98,13 +97,15 @@ public class GUI_Funcionario extends javax.swing.JFrame
             if (rs.next()) {
                 nome = rs.getString("nome_funcionario");
                 departamento = rs.getString("departamento_funcionario");
-                salario = rs.getFloat("salario_funcionario");
-                JOptionPane.showMessageDialog(null, "Nome: " + nome + "\nSalÃ¡rio: R$" + salario + "\nDepartamento: " + departamento);
+                salario = new BigDecimal("salario_funcionario");
+                JOptionPane.showMessageDialog(null, "Nome: " + nome + "\nSalário: R$" + salario + "\nDepartamento: " + departamento);
+                
                 try {
                     op = JOptionPane.showInputDialog("Deseja realmente excluir S/N: ");
                     if (op.equals("s") || (op.equals("S"))) {
                         sql = "UPDATE Funcionarios SET nome_funcionario=?,salario_funcionario=?,departamento_funcionario=? WHERE id='" + cod + "'";
                         PreparedStatement pstm;
+                        
                         pstm = con.prepareStatement(sql);
                         pstm.setString(1, this.jTextField1.getText());
                         pstm.setString(2, this.jTextField2.getText());
@@ -112,23 +113,27 @@ public class GUI_Funcionario extends javax.swing.JFrame
                         pstm.execute();
                         JOptionPane.showMessageDialog(null, "Registro Alterado...");
                     } else {
-                        JOptionPane.showMessageDialog(null, "Registro nÃ£o alterado...");
+                        JOptionPane.showMessageDialog(null, "Registro não alterado...");
                     }
-                    this.jTextField1.setText(null);
-                    this.jTextField2.setText(null);
-                    this.jTextField3.setText(null);
-                    this.jTextField4.setText(null);
+                    
+                    limpar();
                 } catch (SQLException e) {
-                    System.out.println("Erro ao executar o comando SQL:" + e.toString());
+                    System.out.println("Erro ao executar o comando SQL!\n" + e.getMessage());
                 }
-
             } else {
-                JOptionPane.showMessageDialog(null, "Registro nÃ£o encontrado...");
+                JOptionPane.showMessageDialog(null, "Registro não encontrado...");
             }
         } catch (SQLException e) {
-            System.out.println("Erro ao executar o comando SQL:" + e.toString());
+            System.out.println("Erro ao executar o comando SQL:" + e.getMessage());
         }
     }
+
+	private void limpar() {
+		this.jTextField1.setText(null);
+		this.jTextField2.setText(null);
+		this.jTextField3.setText(null);
+		this.jTextField4.setText(null);
+	}
 
     public void ExcluirDados() {
         ResultSet rs;
@@ -146,32 +151,27 @@ public class GUI_Funcionario extends javax.swing.JFrame
                 nome = rs.getString("nome_funcionario");
                 departamento = rs.getString("departamento_funcionario");
                 salario = rs.getFloat("salario_funcionario");
+                
                 try {
-                    JOptionPane.showMessageDialog(null, "Nome: " + nome + "\nSalÃ¡rio: R$" + salario + "\nDepartamento: " + departamento);
+                    JOptionPane.showMessageDialog(null, "Nome: " + nome + "\nSalário: R$" + salario + "\nDepartamento: " + departamento);
                     op = JOptionPane.showInputDialog("Deseja realmente excluir S/N: ");
                     if (op.equals("s") || (op.equals("S"))) {
                         sql = "DELETE FROM Funcionarios WHERE id='" + cod + "'";
                         stmt.executeUpdate(sql);
                         JOptionPane.showMessageDialog(null, "Registro excluido...");
-                        this.jTextField1.setText(null);
-                        this.jTextField2.setText(null);
-                        this.jTextField3.setText(null);
-                        this.jTextField4.setText(null);
+                        limpar();
                     } else {
-                        this.jTextField1.setText(null);
-                        this.jTextField2.setText(null);
-                        this.jTextField3.setText(null);
-                        this.jTextField4.setText(null);
+                        limpar();
                     }
                 } catch (SQLException e) {
-                    System.out.println("Erro ao executar o comando SQL:" + e.toString());
+                    System.out.println("Erro ao executar o comando SQL:" + e.getMessage());
                 }
 
             } else {
-                JOptionPane.showMessageDialog(null, "Registro nÃ£o encontrado...");
+                JOptionPane.showMessageDialog(null, "Registro não encontrado...");
             }
         } catch (SQLException e) {
-            System.out.println("Erro ao executar o comando SQL:" + e.toString());
+            System.out.println("Erro ao executar o comando SQL:" + e.getMessage());
         }
     }
 
@@ -192,23 +192,17 @@ public class GUI_Funcionario extends javax.swing.JFrame
                 nome = rs.getString("nome_funcionario");
                 departamento = rs.getString("departamento_funcionario");
                 salario = rs.getFloat("salario_funcionario");
-                JOptionPane.showMessageDialog(null, "Nome: " + nome + "\nSalÃ¡rio: R$" + salario + "\nDepartamento: " + departamento);
-                this.jTextField1.setText(null);
-                this.jTextField2.setText(null);
-                this.jTextField3.setText(null);
-                this.jTextField4.setText(null);
+                JOptionPane.showMessageDialog(null, "Nome: " + nome + "\nSalário: R$" + salario + "\nDepartamento: " + departamento);
+                limpar();
             } else {
-                JOptionPane.showMessageDialog(null, "Registro nÃ£o encontrado...");
+                JOptionPane.showMessageDialog(null, "Registro não encontrado...");
             }
         } catch (SQLException e) {
-            System.out.println("Erro ao executar o comando SQL:" + e.toString());
+            System.out.println("Erro ao executar o comando SQL:" + e.getMessage());
         }
     }
 
-    @SuppressWarnings("unchecked")
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
-
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jTextField1 = new javax.swing.JTextField();
@@ -229,82 +223,39 @@ public class GUI_Funcionario extends javax.swing.JFrame
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jLabel1.setFont(new java.awt.Font("Tempus Sans ITC", 1, 24)); // NOI18N
-        jLabel1.setText("FUNCIONÃ�RIO");
+        jLabel1.setText("FUNCIONÁRIO");
 
         jLabel2.setText("Nome:");
-
-        jTextField1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField1ActionPerformed(evt);
-            }
-        });
-
-        jLabel3.setText("salÃ¡rio:");
-
+        jTextField1.addActionListener(this::jTextField1ActionPerformed);
+        
+        jLabel3.setText("Salário::");
+        
         jLabel4.setText("Departamento:");
-
-        jTextField3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField3ActionPerformed(evt);
-            }
-        });
+        jTextField3.addActionListener(this::jTextField3ActionPerformed);
 
         jButton1.setText("Sair");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
+        jButton1.addActionListener(this::jButton1ActionPerformed);
 
         jButton2.setText("Limpar");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
-            }
-        });
+        jButton2.addActionListener(this::jButton2ActionPerformed);
 
         jButton3.setText("Cadastrar");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
-            }
-        });
+        jButton3.addActionListener(this::jButton3ActionPerformed);
 
         jButton4.setText("Exibir");
-        jButton4.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton4ActionPerformed(evt);
-            }
-        });
+        jButton4.addActionListener(this::jButton4ActionPerformed);
 
         jButton5.setText("Alterar");
-        jButton5.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton5ActionPerformed(evt);
-            }
-        });
+        jButton5.addActionListener(this::jButton5ActionPerformed);
 
         jButton6.setText("Excluir");
-        jButton6.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton6ActionPerformed(evt);
-            }
-        });
+        jButton6.addActionListener(this::jButton6ActionPerformed);
 
-        jLabel5.setText("CÃ³digo (id):");
-
-        jTextField4.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField4ActionPerformed(evt);
-            }
-        });
+        jLabel5.setText("Codigo (id):");
+        jTextField4.addActionListener(this::jTextField4ActionPerformed);
 
         jButton7.setText("Consultar");
-        jButton7.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton7ActionPerformed(evt);
-            }
-        });
+        jButton7.addActionListener(this::jButton7ActionPerformed);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -397,56 +348,48 @@ public class GUI_Funcionario extends javax.swing.JFrame
         );
 
         pack();
-    }// </editor-fold>//GEN-END:initComponents
+    }
 
-    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) { }
 
-    }//GEN-LAST:event_jTextField1ActionPerformed
-
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {
         JOptionPane.showMessageDialog(null, "Saindo...");
         System.exit(0);
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        this.jTextField1.setText(null);
-        this.jTextField2.setText(null);
-        this.jTextField3.setText(null);
-        this.jTextField4.setText(null);
-    }//GEN-LAST:event_jButton2ActionPerformed
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {
+        limpar();
+    }
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {
         this.Conectar();
         this.setDados();
-    }//GEN-LAST:event_jButton3ActionPerformed
+    }
 
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {
         this.Conectar();
         this.getDados();
-    }//GEN-LAST:event_jButton4ActionPerformed
+    }
 
-    private void jTextField3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField3ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField3ActionPerformed
+    private void jTextField3ActionPerformed(java.awt.event.ActionEvent evt) { }
 
-    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {
         this.Conectar();
         this.AlteraDados();
-    }//GEN-LAST:event_jButton5ActionPerformed
+    }
 
-    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {
         this.Conectar();
         this.ExcluirDados();
-    }//GEN-LAST:event_jButton6ActionPerformed
+    }
 
-    private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
+    private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {
         this.Conectar();
         this.ConsultaDados();
-    }//GEN-LAST:event_jButton7ActionPerformed
+    }
 
-    private void jTextField4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField4ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField4ActionPerformed
+	private void jTextField4ActionPerformed(java.awt.event.ActionEvent evt) {
+	}
 
     public static void main(String args[]) {
         try {
@@ -460,11 +403,7 @@ public class GUI_Funcionario extends javax.swing.JFrame
             java.util.logging.Logger.getLogger(GUI_Funcionario.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new GUI_Funcionario().setVisible(true);
-            }
-        });
+        java.awt.EventQueue.invokeLater(() -> new GUI_Funcionario().setVisible(true));
     }
     
     private javax.swing.JButton jButton1;
