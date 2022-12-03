@@ -9,9 +9,12 @@
 	<li>Made in base Sql -follow- USB Serve (local).</li>
 </ul>
 	
-By RYAN CASTRO FERREIRA,<br>
-<b style="color: blue;">LinkdIn </b>- https://www.linkedin.com/in/ryan-castro-ferreira/ <br>
-<b style="color: red;">Email </b>- ryancasf@gmail.com <br>
+<pre>
+Realizador:
+° RYAN CASTRO FERREIRA.
+<b style="color: blue;">LinkdIn </b>- <a href="https://www.linkedin.com/in/ryan-castro-ferreira">https://www.linkedin.com/in/ryan-castro-ferreira/</a>
+<b style="color: red;">Email </b>- ryancasf@gmail.com
+</pre>
 
 <hr>
 <h2>Attention</h2>
