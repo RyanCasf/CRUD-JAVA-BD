@@ -28,12 +28,3 @@ create table Funcionarios
 <img src="img/ScreenS-Func05.PNG">
 <img src="img/ScreenS-Func06.PNG">
 <video width="320" height="240"><source src="img/videoProjetoFinalJava.avi" type="video/avi"></video>
-
-***
-
-<pre>
-Realizador:
-° RYAN CASTRO FERREIRA.
-<b>LinkedIn</b> - <a href="https://www.linkedin.com/in/ryan-castro-ferreira">https://www.linkedin.com/in/ryan-castro-ferreira/</a>
-<b>E-mail</b> - ryancasf@gmail.com
-</pre>
